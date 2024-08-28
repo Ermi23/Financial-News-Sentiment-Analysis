@@ -103,3 +103,54 @@ class EDA:
             plt.clf()  # Clear the figure after displaying
         else:
             print("No data loaded. Please load the data first.")
+            
+    def plot_calculate_rsi(self, period=14):
+        if self.df is not None:
+            delta = self.df['Close'].diff(1)
+            gain = delta.where(delta > 0, 0)
+            loss = -delta.where(delta < 0, 0)
+            avg_gain = gain.rolling(window=period).mean()
+            avg_loss = loss.rolling(window=period).mean()
+            rs = avg_gain / avg_loss
+            self.df['RSI'] = 100 - (100 / (1 + rs))
+            plt.figure(figsize=(10, 6))
+            plt.plot(self.df['Date'], self.df['RSI'], label='RSI')
+            plt.axhline(y=70, color='red', linestyle='--')
+            plt.axhline(y=30, color='green', linestyle='--')
+            plt.title('Relative Strength Index')
+            plt.xlabel('Date')
+            plt.ylabel('RSI')
+            plt.legend()
+            plt.show()
+        else:
+            print("No data loaded. Please load the data first.")
+            
+    def calculate_moving_averages(self, window_size=50):
+        if self.df is not None:
+            self.df[f'SMA_{window_size}'] = self.df['Close'].rolling(window=window_size).mean()
+            plt.figure(figsize=(10, 6))
+            plt.plot(self.df['Date'], self.df['Close'], label='Close Price')
+            plt.plot(self.df['Date'], self.df[f'SMA_{window_size}'], label=f'SMA {window_size}')
+            plt.title(f'{window_size}-Day Simple Moving Average')
+            plt.xlabel('Date')
+            plt.ylabel('Price')
+            plt.legend()
+            plt.show()
+        else:
+            print("No data loaded. Please load the data first.")
+            
+    def plot_calculate_macd(self, short_window=12, long_window=26, signal_window=9):
+        if self.df is not None:
+            self.df['MACD'] = self.df['Close'].ewm(span=short_window, adjust=False).mean() - \
+                            self.df['Close'].ewm(span=long_window, adjust=False).mean()
+            self.df['Signal Line'] = self.df['MACD'].ewm(span=signal_window, adjust=False).mean()
+            plt.figure(figsize=(10, 6))
+            plt.plot(self.df['Date'], self.df['MACD'], label='MACD')
+            plt.plot(self.df['Date'], self.df['Signal Line'], label='Signal Line')
+            plt.title('MACD and Signal Line')
+            plt.xlabel('Date')
+            plt.ylabel('Value')
+            plt.legend()
+            plt.show()
+        else:
+            print("No data loaded. Please load the data first.")
