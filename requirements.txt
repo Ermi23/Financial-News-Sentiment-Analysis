@@ -8,9 +8,5 @@ scikit-learn
 yfinance
 pynance
 dill
-<<<<<<< HEAD
-null
-=======
 null
 textblob
->>>>>>> Left_On_Task-1

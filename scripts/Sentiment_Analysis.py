@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from textblob import TextBlob  # type: ignore
 import re
-from collections import Counter
 
 
 class NewsAnalysis:
