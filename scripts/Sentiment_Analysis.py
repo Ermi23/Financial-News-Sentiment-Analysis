@@ -26,6 +26,13 @@ class NewsAnalysis:
 
     def calculate_headline_length(self):
         self.df["headline_length"] = self.df["headline"].apply(len)
+        plt.figure(figsize=(10, 6))
+        plt.hist(self.df["headline_length"], bins=30, edgecolor='black')
+        plt.title('Distribution of Headline Lengths')
+        plt.xlabel('Headline Length')
+        plt.ylabel('Frequency')
+        plt.grid(True)
+        plt.show()
 
     def articles_per_publisher(self):
         return self.df["publisher"].value_counts()
