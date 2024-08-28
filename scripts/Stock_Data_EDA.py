@@ -24,14 +24,14 @@ class EDA:
         else:
             print("No data loaded. please load the data first.")
 
-    def plot_correlation_heatmap(self):
-        if self.df is not None:
-            plt.figure(figsize=(10, 8))
-            sns.heatmap(self.df.corr(), annot=True, cmap="coolwarm")
-            plt.title("Correlation Heatmap")
-            plt.show()
-        else:
-            print("Data not loaded. Please load the data first.")
+    # def plot_correlation_heatmap(self):
+    #     if self.df is not None:
+    #         plt.figure(figsize=(10, 8))
+    #         sns.heatmap(self.df.corr(), annot=True, cmap="coolwarm")
+    #         plt.title("Correlation Heatmap")
+    #         plt.show()
+    #     else:
+    #         print("Data not loaded. Please load the data first.")
 
     def count_data_points_per_year(self):
         if self.df is not None:
