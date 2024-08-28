@@ -1,0 +1,12 @@
+pandas
+numpy
+matplotlib
+seaborn
+nltk
+spaCy
+scikit-learn
+yfinance
+pynance
+dill
+null
+textblob
