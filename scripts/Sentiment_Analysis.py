@@ -161,3 +161,28 @@ class NewsAnalysis:
         plt.title('Frequency of Publishers by Domain')
         plt.xticks(rotation=45)
         plt.show()
+        
+    def plot_sentiment_per_publisher(self, top_n=20):
+        """Plot the number of Positive, Negative, and Neutral news per publisher."""
+        
+        # Ensure sentiment analysis is already done
+        if 'sentiment' not in self.df.columns:
+            self.sentiment_analysis()
+        
+        # Group by publisher and sentiment, then count the number of headlines
+        sentiment_per_publisher = self.df.groupby(['publisher', 'sentiment']).size().unstack(fill_value=0)
+        
+        # Filter to top N publishers by total number of articles
+        top_publishers = self.df['publisher'].value_counts().head(top_n).index
+        sentiment_per_publisher = sentiment_per_publisher.loc[top_publishers]
+        
+        # Plot the sentiment counts per publisher
+        sentiment_per_publisher.plot(kind='bar', stacked=True, figsize=(14, 7),
+                                    title=f'Sentiment Distribution per Publisher (Top {top_n})',
+                                    color=['green', 'blue', 'red'])
+        
+        plt.xlabel('Publisher')
+        plt.ylabel('Number of Articles')
+        plt.xticks(rotation=45, ha='right')
+        plt.tight_layout()
+        plt.show()
