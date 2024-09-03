@@ -54,5 +54,36 @@ class CombinedAnalysis:
         print("Normalized News Dates:\n", self.news_df['Date'].head())
         print("Normalized Stock Dates:\n", self.stock_df['Date'].head())
 
+    def analyze_sentiment(self):
+        # Perform sentiment analysis on each headline
+        def get_sentiment(text):
+            analysis = TextBlob(text)
+            return analysis.sentiment.polarity
 
+        self.news_df["sentiment"] = self.news_df["headline"].apply(get_sentiment)
+
+        # Aggregate sentiment scores by date
+        self.daily_sentiment = (
+            self.news_df.groupby("Date")["sentiment"].mean().reset_index()
+        )
+        return self.daily_sentiment
+
+    def calculate_daily_returns(self):
+        # Calculate daily percentage returns in stock data
+        self.stock_df["Daily_Return"] = self.stock_df["Close"].pct_change()
+        return self.stock_df[["Date", "Close", "Daily_Return"]]
+
+    def correlate_with_sentiment(self):
+        # Merge stock data with sentiment data on date
+        merged_df = pd.merge(
+            self.stock_df,
+            self.daily_sentiment,
+            left_on="Date",
+            right_on="Date",
+            how="inner",
+        )
+
+        # Calculate Pearson correlation between daily returns and sentiment
+        correlation = merged_df["Daily_Return"].corr(merged_df["sentiment"])
+        return correlation, merged_df
     
